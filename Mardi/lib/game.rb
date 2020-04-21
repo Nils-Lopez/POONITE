@@ -39,35 +39,23 @@ class Game
 		puts "attaquer un joueur en vie :"
 		ind = 0
 		@enemies.each do |bot|
-			if bot.life_points > 0
-				puts "#{ind} - #{bot.name} a encore #{bot.life_points} point(s) de vie"
-			end
+			puts "#{ind} - #{bot.name} a encore #{bot.life_points} point(s) de vie"
 			ind += 1
 		end
-		print ">"
 	end
 
 	def menu_choice(action)
 		puts "========================================="
-		if action == "a"
-			@human_player.search_weapon 
-		elsif action == "s"
-			@human_player.search_health
-		elsif action.scan(/\D/).empty?
-			i = 0
-			@enemies.each do |bot|
-				puts (action.to_i == i)
-				if action.to_i == i
-					@human_player.attacks(bot)
-					if bot.life_points < 1
-						kill_player(bot)
-					end
-				else
-					i += 1
-				end
-			end
+		case action
+		when "a"
+		  @human_player.search_weapon 
+		when "s"
+		  @human_player.search_health
 		else
-			puts "#{action} n'est pas une commande possible"
+		  @human_player.attacks(@enemies[action.to_i])
+		  if @enemies[action.to_i].life_points < 1
+		  	kill_player(@enemies[action.to_i])
+		  end
 		end
 	end
 
@@ -81,6 +69,7 @@ class Game
 	end
 
 	def end_game 
+		puts "========================================="
 		puts "La partie est finie"
 		if @human_player.life_points > 0 
 			puts "Bravo tu as gagné !"

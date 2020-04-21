@@ -23,9 +23,16 @@ end
 def perform(my_game)
 	while my_game.is_still_ongoing?
 		my_game.menu
-		action = get_user_choice
+		action = "z"
+		while !action.match?("[as0-#{my_game.enemies.length-1}]")
+			puts "Saisis ton choix"
+			print ">"
+		  action = get_user_choice
+		end
 		my_game.menu_choice(action)
-		my_game.enemies_attack
+		if my_game.is_still_ongoing?
+			my_game.enemies_attack
+		end
 	end
 
 	my_game.end_game
